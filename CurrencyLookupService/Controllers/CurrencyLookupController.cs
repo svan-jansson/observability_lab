@@ -5,29 +5,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CurrencyConverterApi.Controllers
+namespace CurrencyLookupService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CurrencyConverterController : ControllerBase
+    public class CurrencyLookupController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<CurrencyConverterController> _logger;
+        private readonly ILogger<CurrencyLookupController> _logger;
 
-        public CurrencyConverterController(ILogger<CurrencyConverterController> logger)
+        public CurrencyLookupController(ILogger<CurrencyLookupController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<CurrencyConversionResult> Get()
+        public IEnumerable<CurrencyLookupResult> Get()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new CurrencyConversionResult
+            return Enumerable.Range(1, 5).Select(index => new CurrencyLookupResult
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
