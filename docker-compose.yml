@@ -5,18 +5,12 @@ networks:
 
 services:
   loki:
-    image: grafana/loki:1.6.0
+    image: grafana/loki:2.0.0
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - observability
-
-  promtail:
-    image: grafana/promtail:1.6.0
     volumes:
-      - /var/log:/var/log
-    command: -config.file=/etc/promtail/config.yml
+      - ./.loki:/etc/loki
+    command: -config.file=/etc/loki/local-config.yaml
     networks:
       - observability
 
@@ -24,5 +18,7 @@ services:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    volumes:
+      - ./.grafana:/var/lib/grafana
     networks:
       - observability
