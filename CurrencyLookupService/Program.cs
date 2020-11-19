@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Sinks.Loki;
+using Serilog.Sinks.Loki.Labels;
 
 namespace CurrencyLookupService
 {
@@ -14,9 +16,11 @@ namespace CurrencyLookupService
     {
         public static void Main(string[] args)
         {
+            var lokiCredentials = new NoAuthCredentials("http://localhost:3100");
+
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
+                .WriteTo.LokiHttp(lokiCredentials, new LogLabelProvider())
                 .CreateLogger();
 
             try
@@ -41,5 +45,18 @@ namespace CurrencyLookupService
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private class LogLabelProvider : ILogLabelProvider
+        {
+            public IList<LokiLabel> GetLabels()
+            {
+                return new List<LokiLabel>
+                {
+                    new LokiLabel("app", nameof(CurrencyLookupService)),
+                    new LokiLabel("domain", "currency")
+                };
+            }
+
+        }
     }
 }
