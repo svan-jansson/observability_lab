@@ -1,8 +1,8 @@
 using System;
 
-namespace CurrencyConverterApi
+namespace CurrencyApi
 {
-    public class CurrencyConversionResult
+    public class CurrencyApiResult
     {
         public DateTime Date { get; set; }
 

@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CurrencyConverterApi.Controllers
+namespace CurrencyConversionService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CurrencyConverterController : ControllerBase
+    public class CurrencyConversionController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<CurrencyConverterController> _logger;
+        private readonly ILogger<CurrencyConversionController> _logger;
 
-        public CurrencyConverterController(ILogger<CurrencyConverterController> logger)
+        public CurrencyConversionController(ILogger<CurrencyConversionController> logger)
         {
             _logger = logger;
         }

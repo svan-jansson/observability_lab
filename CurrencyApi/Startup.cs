@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace CurrencyConverterApi
+namespace CurrencyApi
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace CurrencyConverterApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyConverterApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyApi", Version = "v1" });
             });
         }
 
@@ -41,7 +41,7 @@ namespace CurrencyConverterApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CurrencyConverterApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CurrencyApi v1"));
             }
 
             app.UseHttpsRedirection();
