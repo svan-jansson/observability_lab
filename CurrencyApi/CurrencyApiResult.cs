@@ -1,15 +1,10 @@
-using System;
-
 namespace CurrencyApi
 {
-    public class CurrencyApiResult
+    public record CurrencyApiResult
     {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public string Summary { get; set; }
+        public string CurrencyCode { get; init; }
+        public string CurrencyName { get; init; }
+        public decimal ConversionRate { get; init; }
+        public decimal ConvertedValue { get; init; }
     }
 }

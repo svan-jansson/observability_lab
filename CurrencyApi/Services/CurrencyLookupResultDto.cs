@@ -1,6 +1,6 @@
-namespace CurrencyLookupService
+namespace CurrencyApi.Services
 {
-    public class CurrencyLookupResult
+    public class CurrencyLookupResultDto
     {
         public string CurrencyCode { get; set; }
         public string CurrencyName { get; set; }

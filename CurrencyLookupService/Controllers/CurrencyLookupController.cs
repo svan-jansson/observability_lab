@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace CurrencyLookupService.Controllers
 {
@@ -11,9 +8,18 @@ namespace CurrencyLookupService.Controllers
     [Route("[controller]")]
     public class CurrencyLookupController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private static readonly Dictionary<string, string> ValidCurrencies = new Dictionary<string, string>
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            { "SEK", "Swedish krona" },
+            { "EUR", "Euro" },
+            { "USD", "United States dollar" },
+            { "GBP", "British pound" },
+            { "DKK", "Danish krone" },
+            { "NOK", "Norwegian krone" },
+            { "CNY", "Chinese yuan" },
+            { "JPY", "Japanese yen" },
+            { "EGP", "Egyptian pound" },
+            { "BRL", "Brazilian real" }
         };
 
         private readonly ILogger<CurrencyLookupController> _logger;
@@ -23,17 +29,26 @@ namespace CurrencyLookupService.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<CurrencyLookupResult> Get()
+        [HttpGet("{currencyCode}")]
+        public IActionResult Get(string currencyCode)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new CurrencyLookupResult
+            if (string.IsNullOrWhiteSpace(currencyCode))
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+                return BadRequest($"{nameof(currencyCode)} cannot be empty");
+            }
+
+            currencyCode = currencyCode.ToUpperInvariant().TrimEnd();
+
+            if (!ValidCurrencies.ContainsKey(currencyCode))
+            {
+                return NotFound(currencyCode);
+            }
+
+            return Ok(new CurrencyLookupResult
+            {
+                CurrencyCode = currencyCode,
+                CurrencyName = ValidCurrencies[currencyCode]
+            });
         }
     }
 }
