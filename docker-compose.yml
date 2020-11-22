@@ -4,6 +4,15 @@ networks:
   observability:
 
 services:
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./.grafana:/var/lib/grafana
+    networks:
+      - observability
+
   loki:
     image: grafana/loki:2.0.0
     ports:
@@ -11,14 +20,5 @@ services:
     volumes:
       - ./.loki:/etc/loki
     command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - observability
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./.grafana:/var/lib/grafana
     networks:
       - observability
