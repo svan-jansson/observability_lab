@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace CurrencyApi
 {
@@ -27,6 +30,19 @@ namespace CurrencyApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CurrencyApi", Version = "v1" });
             });
             services.AddHttpClient<IHttpService, HttpService>();
+
+            var serviceName = nameof(CurrencyApi);
+            services.AddOpenTelemetryTracing((builder)
+                => builder
+                        .AddAspNetCoreInstrumentation()
+                        .AddSource(serviceName)
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+                        .SetSampler(new AlwaysOnSampler())
+                        .AddJaegerExporter(options =>
+                        {
+                            options.AgentHost = "localhost";
+                            options.AgentPort = 6831;
+                        }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
