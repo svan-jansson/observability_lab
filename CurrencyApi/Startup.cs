@@ -35,6 +35,7 @@ namespace CurrencyApi
             services.AddOpenTelemetryTracing((builder)
                 => builder
                         .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
                         .AddSource(serviceName)
                         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
                         .SetSampler(new AlwaysOnSampler())

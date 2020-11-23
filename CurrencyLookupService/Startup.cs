@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
+using System.Text;
 
 namespace CurrencyLookupService
 {
@@ -40,6 +35,7 @@ namespace CurrencyLookupService
             services.AddOpenTelemetryTracing((builder)
                 => builder
                         .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
                         .AddSource(serviceName)
                         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
                         .SetSampler(new AlwaysOnSampler())
