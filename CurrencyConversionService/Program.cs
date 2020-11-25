@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Enrichers.Span;
 using Serilog.Sinks.Loki;
 using Serilog.Sinks.Loki.Labels;
 using System;
@@ -16,6 +17,7 @@ namespace CurrencyConversionService
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .Enrich.WithSpan()
                 .WriteTo.LokiHttp(lokiCredentials, new LogLabelProvider())
                 .CreateLogger();
 
