@@ -1,6 +1,8 @@
 ﻿using CurrencyConversionService.Caches;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace CurrencyConversionService.Controllers
 {
@@ -20,7 +22,13 @@ namespace CurrencyConversionService.Controllers
         {
             var fromRate = ConversionRateCache.Get(from);
             var toRate = ConversionRateCache.Get(to);
+
+            // Simulate slow service
+            Task.Delay(rng.Next(50, 100)).Wait();
+
             return toRate / fromRate;
         }
+
+        private readonly Random rng = new Random();
     }
 }
