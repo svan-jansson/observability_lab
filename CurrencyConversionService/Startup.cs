@@ -35,10 +35,10 @@ namespace CurrencyConversionService
             var serviceName = nameof(CurrencyConversionService);
             services.AddOpenTelemetryTracing((builder)
                 => builder
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+                        .AddSource(serviceName)
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .AddSource(serviceName)
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
                         .SetSampler(new AlwaysOnSampler())
                         .AddJaegerExporter(options =>
                         {
