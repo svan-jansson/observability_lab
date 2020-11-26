@@ -14,7 +14,7 @@ services:
       - observability
 
   loki:
-    image: grafana/loki:2.0.0
+    image: grafana/loki:latest
     ports:
       - "3100:3100"
     volumes:
@@ -28,5 +28,18 @@ services:
     ports:
       - "6831:6831/udp"
       - "16686:16686"
+    networks:
+      - observability
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./.prometheus/etc:/etc/prometheus
+      - ./.prometheus/data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+    ports:
+      - "9090:9090"
     networks:
       - observability
