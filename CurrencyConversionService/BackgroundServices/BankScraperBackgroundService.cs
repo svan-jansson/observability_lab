@@ -1,6 +1,7 @@
 ﻿using CurrencyConversionService.Caches;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Prometheus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace CurrencyConversionService.BackgroundServices
         private readonly ILogger<BankScraperBackgroundService> _logger;
         private Timer _timer;
         private readonly Random _rng = new Random();
+
+        private readonly Gauge _gauge = Metrics.CreateGauge(
+            "currency_conversion_rate",
+            "Gauges the current conversion rate of a currency",
+            new[] { "currency_code" }
+            );
 
         const string BaseCurrencyCode = "SEK";
         private static readonly Dictionary<string, decimal> CurrencyFlatRates = new Dictionary<string, decimal>
@@ -66,6 +73,8 @@ namespace CurrencyConversionService.BackgroundServices
                     newRate += Math.Abs(modifier);
                 }
                 newRate = Math.Round(newRate, 3);
+
+                _gauge.WithLabels(new[] { rate.Key }).Set(Convert.ToDouble(newRate));
 
                 _logger.LogInformation($"Conversion rate for {rate.Key} changed from {currentRate} to {newRate}.");
                 ConversionRateCache.Set(rate.Key, newRate);
