@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,8 +8,7 @@ using Microsoft.OpenApi.Models;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System;
-using System.Text;
+using Prometheus;
 
 namespace CurrencyLookupService
 {
@@ -46,6 +46,8 @@ namespace CurrencyLookupService
                         }));
         }
 
+        private static MetricPusher _metricsPusher;
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -60,12 +62,25 @@ namespace CurrencyLookupService
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+
+            if (_metricsPusher == default)
+            {
+                _metricsPusher = new MetricPusher(
+                    endpoint: "http://localhost:9091/metrics",
+                    job: nameof(CurrencyLookupService),
+                    additionalLabels: new[] { new Tuple<string, string>("domain", "currency") }
+                    );
+                _metricsPusher.Start();
+            }
         }
     }
 }

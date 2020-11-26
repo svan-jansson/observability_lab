@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Prometheus;
+using System;
 
 namespace CurrencyApi
 {
@@ -47,6 +49,8 @@ namespace CurrencyApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        private static MetricPusher _metricsPusher;
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -60,12 +64,25 @@ namespace CurrencyApi
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+
+            if (_metricsPusher == default)
+            {
+                _metricsPusher = new MetricPusher(
+                    endpoint: "http://localhost:9091/metrics",
+                    job: nameof(CurrencyApi),
+                    additionalLabels: new[] { new Tuple<string, string>("domain", "currency") }
+                    );
+                _metricsPusher.Start();
+            }
         }
     }
 }
