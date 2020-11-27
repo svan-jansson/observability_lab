@@ -19,7 +19,7 @@
     "links": [],
     "panels": [
         {
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "description": "",
             "fieldConfig": {
                 "defaults": {
@@ -87,7 +87,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "fieldConfig": {
                 "defaults": {
                     "custom": {}

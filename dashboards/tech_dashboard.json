@@ -23,7 +23,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "fieldConfig": {
                 "defaults": {
                     "custom": {}
@@ -231,7 +231,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "fieldConfig": {
                 "defaults": {
                     "custom": {}
@@ -322,7 +322,7 @@
             }
         },
         {
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "description": "",
             "fieldConfig": {
                 "defaults": {
@@ -383,7 +383,7 @@
             "type": "bargauge"
         },
         {
-            "datasource": "Prometheus",
+            "datasource": "Metrics",
             "description": "",
             "fieldConfig": {
                 "defaults": {
