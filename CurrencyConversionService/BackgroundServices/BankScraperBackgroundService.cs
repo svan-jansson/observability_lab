@@ -28,7 +28,7 @@ namespace CurrencyConversionService.BackgroundServices
             { "SEK", 1 },
             { "EUR", 10 },
             { "USD", 10 },
-            { "GBP", 10 },
+            { "GBP", 15 },
             { "DKK", 1 },
             { "NOK", 1 },
             { "CNY", 1 },
