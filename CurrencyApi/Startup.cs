@@ -45,6 +45,7 @@ namespace CurrencyApi
                         {
                             options.AgentHost = "localhost";
                             options.AgentPort = 6831;
+                            options.MaxPayloadSizeInBytes = 65000;
                         }));
         }
 
