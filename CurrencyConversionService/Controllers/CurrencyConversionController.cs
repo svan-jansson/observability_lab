@@ -24,7 +24,7 @@ namespace CurrencyConversionService.Controllers
             var toRate = ConversionRateCache.Get(to);
 
             // Simulate slow service
-            Task.Delay(rng.Next(50, 100)).Wait();
+            Task.Delay(rng.Next(10, 200)).Wait();
 
             return toRate / fromRate;
         }

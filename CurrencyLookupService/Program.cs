@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Enrichers.Span;
 using Serilog.Sinks.Loki;
 using Serilog.Sinks.Loki.Labels;
 using System;
@@ -16,8 +15,8 @@ namespace CurrencyLookupService
             var lokiCredentials = new NoAuthCredentials("http://localhost:3100");
 
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Warning()
                 .Enrich.FromLogContext()
-                .Enrich.WithSpan()
                 .WriteTo.LokiHttp(lokiCredentials, new LogLabelProvider())
                 .CreateLogger();
 

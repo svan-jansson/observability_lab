@@ -46,6 +46,9 @@ namespace LoadSimulator
 
             Console.WriteLine($"LoadSimulator: Using parallelism {Parallelism}.");
 
+            // Wait until servies are ready...
+            Task.Delay(5_000).Wait();
+
             while (true)
             {
                 var tasks = new List<Task>();
