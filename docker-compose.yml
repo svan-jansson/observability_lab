@@ -5,26 +5,29 @@ networks:
 
 services:
   grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
+    image: grafana/grafana:7.3.4
+    container_name: grafana
     volumes:
       - ./.grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
     networks:
       - observability
 
   loki:
-    image: grafana/loki:latest
-    ports:
-      - "3100:3100"
+    image: grafana/loki:2.0.0
+    container_name: loki
     volumes:
       - ./.loki:/etc/loki
     command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
     networks:
       - observability
 
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/opentelemetry-all-in-one:latest
+    container_name: jaeger
     ports:
       - "6831:6831/udp"
       - "16686:16686"
@@ -32,20 +35,19 @@ services:
       - observability
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.23.0
     container_name: prometheus
     volumes:
       - ./.prometheus/etc:/etc/prometheus
       - ./.prometheus/data:/prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
-
     ports:
       - "9090:9090"
     networks:
       - observability
 
   prometheus-pushgateway:
-    image: prom/pushgateway:latest
+    image: prom/pushgateway:v1.3.0
     container_name: pushgateway
     ports:
       - "9091:9091"
