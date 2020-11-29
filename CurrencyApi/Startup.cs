@@ -33,6 +33,18 @@ namespace CurrencyApi
             });
             services.AddHttpClient<IHttpService, HttpService>();
 
+            #region Export Inbound and Outbound Traces to Jaeger
+
+            /*
+                Required NuGet Packages
+
+                - OpenTelemetry
+                - OpenTelemetry.Exporter.Jaeger
+                - OpenTelemetry.Extensions.Hosting
+                - OpenTelemetry.Instrumentation.AspNetCore
+                - OpenTelemetry.Instrumentation.Http
+            */
+
             var serviceName = nameof(CurrencyApi);
             services.AddOpenTelemetryTracing((builder)
                 => builder
@@ -47,6 +59,8 @@ namespace CurrencyApi
                             options.AgentPort = 6831;
                             options.MaxPayloadSizeInBytes = 65000;
                         }));
+
+            # endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,15 +79,13 @@ namespace CurrencyApi
 
             app.UseRouting();
 
-            app.UseHttpMetrics();
+            # region Export HTTP Metrics to Prometheus
 
-            app.UseAuthorization();
+            /*
+                Required NuGet Packages
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
+                - prometheus-net.AspNetCore
+            */
 
             if (_metricsPusher == default)
             {
@@ -84,6 +96,18 @@ namespace CurrencyApi
                     );
                 _metricsPusher.Start();
             }
+
+            app.UseHttpMetrics();
+
+            # endregion
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
         }
     }
 }

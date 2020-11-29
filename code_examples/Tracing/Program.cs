@@ -10,12 +10,18 @@ namespace Tracing
     {
         static void Main(string[] args)
         {
+            # region Create Diagnostics Source
+
             const string ServiceName = "Examples.Tracing";
             var activitySource = new ActivitySource(ServiceName);
 
+            # endregion
+
+            # region Create Tracer Provider
+
             using var openTelemetry = Sdk.CreateTracerProviderBuilder()
                     .AddSource(ServiceName)
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(ServiceName))
+                    .SetResourceBuilder(ResourceBuilder.CreSateDefault().AddService(ServiceName))
                     .SetSampler(new AlwaysOnSampler())
                     // .SetSampler(new TraceIdRatioBasedSampler(0.5))
                     // .SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.5)))
@@ -26,6 +32,10 @@ namespace Tracing
                             options.MaxPayloadSizeInBytes = 65000;
                         })
                     .Build();
+
+            # endregion
+
+            # region Record Some Spans!
 
             using (var activity = activitySource.StartActivity("MyTrace"))
             {
@@ -41,6 +51,8 @@ namespace Tracing
                     Task.Delay(1_000).Wait();
                 }
             }
+
+            # endregion
         }
     }
 }

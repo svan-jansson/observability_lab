@@ -12,6 +12,15 @@ namespace CurrencyApi
     {
         public static void Main(string[] args)
         {
+            #region Send Logs to Loki using Serilog
+
+            /*
+                Required NuGet Packages
+
+                - Serilog.AspNetCore
+                - Serilog.Sinks.Loki            
+            */
+
             var lokiCredentials = new NoAuthCredentials("http://localhost:3100");
 
             Log.Logger = new LoggerConfiguration()
@@ -19,6 +28,8 @@ namespace CurrencyApi
                 .Enrich.FromLogContext()
                 .WriteTo.LokiHttp(lokiCredentials, new LogLabelProvider())
                 .CreateLogger();
+
+            #endregion
 
             try
             {

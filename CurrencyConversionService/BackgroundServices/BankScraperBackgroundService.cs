@@ -16,11 +16,15 @@ namespace CurrencyConversionService.BackgroundServices
         private Timer _timer;
         private readonly Random _rng = new Random();
 
+        # region Create a Gauge (Measure) for Recording Currency Rates
+
         private readonly Gauge _gauge = Metrics.CreateGauge(
-            "currency_conversion_rate",
-            "Gauges the current conversion rate of a currency",
-            new[] { "currency_code" }
+            name: "currency_conversion_rate",
+            help: "Gauges the current conversion rate of a currency",
+            labelNames: new[] { "currency_code" }
             );
+
+        # endregion
 
         const string BaseCurrencyCode = "SEK";
         private static readonly Dictionary<string, decimal> CurrencyFlatRates = new Dictionary<string, decimal>
@@ -74,7 +78,11 @@ namespace CurrencyConversionService.BackgroundServices
                 }
                 newRate = Math.Round(newRate, 3);
 
+                # region Update Gauge (Measure) With new Value
+
                 _gauge.WithLabels(new[] { rate.Key }).Set(Convert.ToDouble(newRate));
+
+                # endregion
 
                 _logger.LogInformation($"Conversion rate for {rate.Key} changed from {currentRate} to {newRate}.");
                 ConversionRateCache.Set(rate.Key, newRate);

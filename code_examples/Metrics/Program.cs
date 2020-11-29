@@ -13,11 +13,17 @@ namespace Metrics
     {
         static void Main(string[] args)
         {
+            # region Create a Server for Exporting Metrics
+
             var port = 9999;
             var promOptions = new PrometheusExporterOptions() { Url = $"http://localhost:{port}/metrics/" };
             var promExporter = new PrometheusExporter(promOptions);
             var metricsHttpServer = new PrometheusExporterMetricsHttpServer(promExporter);
             metricsHttpServer.Start();
+
+            # endregion
+
+            # region Create a Meter Provider
 
             var processor = new UngroupedBatcher();
 
@@ -27,20 +33,26 @@ namespace Metrics
                 .SetPushInterval(TimeSpan.FromSeconds(1))
                 .Build());
 
+            # endregion
+
+            # region Create a Simple Counter Meter
+
             var meterProvider = MeterProvider.Default;
+            var meter = meterProvider.GetMeter("DemoMeter");
+            var testCounter = meter.CreateInt64Counter("SimpleCounterMeter");
 
-            var meter = meterProvider.GetMeter("MyMeter");
+            # endregion
 
-            var testCounter = meter.CreateInt64Counter("MyCounter");
+            # region Record Some Metrics!
+
             var defaultContext = default(SpanContext);
-
             for (var i = 0; i < 1000; i++)
             {
                 testCounter.Add(defaultContext, 1, meter.GetLabelSet(new[] { KeyValuePair.Create("my", "test") }));
                 Task.Delay(1_000).Wait();
             }
 
-            metricsHttpServer.Stop();
+            # endregion
         }
     }
 }

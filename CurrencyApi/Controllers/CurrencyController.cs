@@ -41,8 +41,13 @@ namespace CurrencyApi.Controllers
             }
             catch
             {
+                # region Add TraceID to Log Output
+
                 var traceId = Activity.Current?.TraceId.ToString() ?? HttpContext?.TraceIdentifier;
                 _logger.LogError($"Lookup currency {from} failed. traceID={traceId}.");
+
+                #endregion
+
                 throw;
             }
 
