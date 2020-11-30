@@ -8,6 +8,11 @@ namespace Tracing
 {
     class Program
     {
+        /*
+            NuGet Packages
+                - OpenTelemetry
+                - OpenTelemetry.Exporter.Jaeger
+        */
         static void Main(string[] args)
         {
             # region Create Diagnostics Source
@@ -21,7 +26,7 @@ namespace Tracing
 
             using var openTelemetry = Sdk.CreateTracerProviderBuilder()
                     .AddSource(ServiceName)
-                    .SetResourceBuilder(ResourceBuilder.CreSateDefault().AddService(ServiceName))
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(ServiceName))
                     .SetSampler(new AlwaysOnSampler())
                     // .SetSampler(new TraceIdRatioBasedSampler(0.5))
                     // .SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.5)))
@@ -37,17 +42,20 @@ namespace Tracing
 
             # region Record Some Spans!
 
-            using (var activity = activitySource.StartActivity("MyTrace"))
+            using (var activity = activitySource.StartActivity("MySpan"))
             {
                 activity?.SetTag("some.tag", "value");
 
-                using (activitySource.StartActivity("ChildTrace"))
+                using (var childSpan = activitySource.StartActivity("ChildSpan"))
                 {
+                    childSpan?.AddEvent(new ActivityEvent("Something interesting happened"));
                     Task.Delay(1_000).Wait();
                 }
 
-                using (activitySource.StartActivity("AnotherChildTrace"))
+                using (var childSpan = activitySource.StartActivity("AnotherChildSpan"))
                 {
+                    childSpan?.AddEvent(new ActivityEvent("Something went wrong :("));
+                    childSpan?.SetTag("error", true);
                     Task.Delay(1_000).Wait();
                 }
             }
