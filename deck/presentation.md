@@ -78,18 +78,23 @@ _Add Observability to a Microservice System_
 - __Visualize in Grafana__
 
 ---
+<!-- backgroundImage: url('./images/background_3.jpg') -->
 
-# Step 1: Add Tracing
+# Step 1: Tracing
 
-```text
-                                 Trace Span
+_Lets figure out how our services interact by adding tracing_
 
-            start                                           stop
-            |    |---------------GetCustomer---------------|
-            |      |---Authenticate---||---CallDatabase---|
-            |        |---GetUser---|
-            |         |--Http GET--|
-            |           |--GetUser--|
-            v     
-            nesting ---------------------------------------> time
-```
+---
+# Why is Tracing Helpful?
+
+![width:100%](./images/polyglot.PNG)
+
+---
+# Trace Spans
+
+![width:100%](./images/spans.PNG)
+
+---
+# Where to Begin?
+
+![width:100%](./images/trace_edges.PNG)
