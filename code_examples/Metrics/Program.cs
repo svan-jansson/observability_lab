@@ -11,6 +11,11 @@ namespace Metrics
 {
     class Program
     {
+        /*
+            NuGet Packages
+                - OpenTelemetry
+                - OpenTelemetry.Exporter.Prometheus
+        */
         static void Main(string[] args)
         {
             # region Create a Server for Exporting Metrics
@@ -35,11 +40,15 @@ namespace Metrics
 
             # endregion
 
-            # region Create a Simple Counter Meter
+            # region Make some Measurements
+            var labels = new[] { KeyValuePair.Create("my", "label") };
 
             var meterProvider = MeterProvider.Default;
-            var meter = meterProvider.GetMeter("DemoMeter");
-            var testCounter = meter.CreateInt64Counter("SimpleCounterMeter");
+            var meter = meterProvider.GetMeter("demo_meter");
+
+            var counterMeasurement = meter.CreateInt64Counter("iteration_counter");
+            var valueMeasurement = meter.CreateInt64Measure("iteration_measure");
+            var observerMeasurement = meter.CreateInt64Observer("memory_observer", (o) => o.Observe(GC.GetTotalMemory(true), labels));
 
             # endregion
 
@@ -48,7 +57,8 @@ namespace Metrics
             var defaultContext = default(SpanContext);
             for (var i = 0; i < 1000; i++)
             {
-                testCounter.Add(defaultContext, 1, meter.GetLabelSet(new[] { KeyValuePair.Create("my", "test") }));
+                counterMeasurement.Add(defaultContext, 1, labels);
+                valueMeasurement.Record(defaultContext, i, labels);
                 Task.Delay(1_000).Wait();
             }
 

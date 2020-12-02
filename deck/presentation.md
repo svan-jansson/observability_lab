@@ -98,3 +98,36 @@ _Lets figure out how our services interact by adding tracing_
 # Where to Begin?
 
 ![width:100%](./images/trace_edges.PNG)
+
+_Now lets look at some code!_
+
+---
+<!-- backgroundImage: url('./images/background_4.jpg') -->
+# Step 2: Metrics
+
+_Lets measure our services_
+
+---
+# What are Meters?
+
+- __Counters__: How many requests are made to a service?
+- __Values__: _Gauges_ - What is the current memory usage?
+- __Sums__: How many seconds does a process take?
+- __Measures__: _Histograms_ Combination of Sum, Count and Quantiles.
+
+_Now lets look at some code!_
+
+---
+
+<!-- backgroundImage: url('./images/background_5.jpg') -->
+# Step 3: Logging
+_Lets export our logs to a log aggregator_
+
+---
+# Log Aggregation
+
+- __Agents__: Promtail, Fluentd, Logstash ...
+- __Engines__: Loki, Elasticsearch, Splunk ...
+- __Visualization__: Grafana, Kibana, Azure Insights ...
+
+_Now lets look at some code!_
