@@ -48,7 +48,9 @@ namespace CurrencyApi
             var serviceName = nameof(CurrencyApi);
             services.AddOpenTelemetryTracing((builder)
                 => builder
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+                        .SetResourceBuilder(ResourceBuilder
+                            .CreateDefault()
+                            .AddService(serviceName))
                         .AddSource(serviceName)
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()

@@ -16,7 +16,7 @@ namespace CurrencyConversionService.BackgroundServices
         private Timer _timer;
         private readonly Random _rng = new Random();
 
-        # region Create a Gauge (Measure) for Recording Currency Rates
+        # region Create a Gauge (Observer / ValueMetric) for Recording Currency Rates
 
         private readonly Gauge _gauge = Metrics.CreateGauge(
             name: "currency_conversion_rate",
@@ -78,7 +78,7 @@ namespace CurrencyConversionService.BackgroundServices
                 }
                 newRate = Math.Round(newRate, 3);
 
-                # region Update Gauge (Measure) With new Value
+                # region Update Gauge (Observer / ValueMetric) With new Value
 
                 _gauge.WithLabels(new[] { rate.Key }).Set(Convert.ToDouble(newRate));
 

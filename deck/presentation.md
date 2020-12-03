@@ -20,9 +20,9 @@ Erik Svensson, Webstep, 2020
 
 _Increasingly important as we move to distributed_
 
-- __Tracing__ - Follow the request flow
-- __Metrics__ - Measure over time
-- __Logging__ - Record key events
+- __Tracing__ - Follow the request flow within the system
+- __Metrics__ - Measure, count, gauge and predic the system
+- __Logging__ - Application specific messages with key info
 
 ---
 
@@ -32,6 +32,7 @@ _Increasingly important as we move to distributed_
 
 _A lot has happened in 2020_
 
+- __Microservices is Norm / Debugging methods outdated__ 
 - __Vendored Solutions / Lacking Conventions__
 - __OpenTracing + OpenCensus = OpenTelemetry__
 - __Observability as a First Class Citizen__
@@ -46,6 +47,7 @@ _A lot has happened in 2020_
 
     +---------+   host | 
     | Service |        |
+    |  + SDK  |        |
     +----+----+        |
          |             |
          v             |
@@ -60,7 +62,7 @@ _A lot has happened in 2020_
 
 # OpenTelemetry and .NET
 
-_Almost there but not quite..._
+_Getting there but not quite..._
 
 - __Tracing__: 🙂
 - __Metrics__: 😐

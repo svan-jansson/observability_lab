@@ -24,19 +24,24 @@ namespace Tracing
 
             # region Create Tracer Provider
 
-            using var openTelemetry = Sdk.CreateTracerProviderBuilder()
-                    .AddSource(ServiceName)
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(ServiceName))
-                    .SetSampler(new AlwaysOnSampler())
-                    // .SetSampler(new TraceIdRatioBasedSampler(0.5))
-                    // .SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.5)))
-                    .AddJaegerExporter(options =>
-                        {
-                            options.AgentHost = "localhost";
-                            options.AgentPort = 6831;
-                            options.MaxPayloadSizeInBytes = 65000;
-                        })
-                    .Build();
+            using var openTelemetry =
+
+            Sdk.CreateTracerProviderBuilder()
+                .AddSource(ServiceName)
+                .SetResourceBuilder(
+                    ResourceBuilder
+                        .CreateDefault()
+                        .AddService(ServiceName))
+                .SetSampler(new AlwaysOnSampler())
+                // .SetSampler(new TraceIdRatioBasedSampler(0.5))
+                // .SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.5)))
+                .AddJaegerExporter(options =>
+                    {
+                        options.AgentHost = "localhost";
+                        options.AgentPort = 6831;
+                        options.MaxPayloadSizeInBytes = 65000;
+                    })
+                .Build();
 
             # endregion
 

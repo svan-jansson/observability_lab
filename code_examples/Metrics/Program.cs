@@ -40,7 +40,7 @@ namespace Metrics
 
             # endregion
 
-            # region Make some Measurements
+            # region Prepare some Metrics 
             var labels = new[] { KeyValuePair.Create("my", "label") };
 
             var meterProvider = MeterProvider.Default;
